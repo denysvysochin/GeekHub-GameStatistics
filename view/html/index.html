@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ProApp">
+<head>
+    <meta charset="UTF-8">
+    <title>ProStatistic</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <script src="../js/index.js"></script>
+</head>
+<body>
+    <div ng-controller="ProStatisticController as proStatistic">
+        <h1>ProStatistic</h1>
+
+        <h2>Disciplines</h2>
+        <ul ng-repeat="discipline in proStatistic.disciplines">
+            <a href="#">{{discipline.name}}</a>
+        </ul>
+    </div>
+</body>
+</html>
