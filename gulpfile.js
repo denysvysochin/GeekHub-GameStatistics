@@ -1,4 +1,3 @@
-/*
 'use strict';
 
 const gulp = require('gulp'),
@@ -24,10 +23,20 @@ const gulp = require('gulp'),
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['scripts', 'scripts:hint', 'html', 'styles']);
+gulp.task('build', ['scripts', 'scripts:hint', 'styles']);
 
 gulp.task('styles', () => {
-    return gulp.src('app/styles/!*.less')
+    return gulp.src('styles/!*.less')
+        .pipe(sourcemaps.init())
+        .pipe(less())
+        .pipe(cssnano())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('dist/styles'))
+        .pipe(livereload());
+});
+
+gulp.task('styles', () => {
+    return gulp.src('styles/!*.css')
         .pipe(sourcemaps.init())
         .pipe(less())
         .pipe(cssnano())
@@ -38,7 +47,7 @@ gulp.task('styles', () => {
 
 gulp.task('scripts', () => {
     let b = browserify({
-        entries: ['app/js/index.js'],
+        entries: ['server/js/main.js'],
         cache: {},
         packageCache: {},
         debug: true
@@ -49,23 +58,30 @@ gulp.task('scripts', () => {
     b.on('time', gutil.log);
 
     return b.bundle()
-        .pipe(source('index.js'))
+        .pipe(source('main.js'))
         .pipe(buffer())
         .pipe(ngAnnotate())
         //.pipe(uglify())
-        .pipe(gulp.dest('dist/js'))
+        .pipe(gulp.dest('dist/server/js'))
         .pipe(livereload());
 });
 
+
 gulp.task('scripts:hint', () => {
-    return gulp.src(['app/js/!**!/!*.js', 'tests/!**!/!*.js'])
+    return gulp.src(['server/js/**/*.js'])
         .pipe(jshint({esnext: true}))
         .pipe(jshint.reporter(jshintStylish));
 });
 
+/*gulp.task('script', () => {
+    return gulp.src(['server/js/schema/!*.js'])
+        .pipe(gulp.dest('dist/server/js/schema/'))
+        .pipe(livereload());
+});
+
 gulp.task('script', () => {
-    return gulp.src('app/js/pieChart.js')
-        .pipe(gulp.dest('dist'))
+    return gulp.src(['server/js/schema/!*.js'])
+        .pipe(gulp.dest('dist/server/js/schema/'))
         .pipe(livereload());
 });
 
@@ -73,7 +89,7 @@ gulp.task('html', () => {
     return gulp.src('app/index.html')
         .pipe(gulp.dest('dist'))
         .pipe(livereload());
-});
+});*/
 
 gulp.task('clean', () => {
     del(['dist'], cb);
@@ -81,7 +97,7 @@ gulp.task('clean', () => {
 
 gulp.task('watch', ['build', 'serve'], () => {
     livereload.listen();
-    new karma.Server({
+    /*new karma.Server({
         configFile: __dirname + '/karma.conf.js',
         autoWatch: false,
         singleRun: false
@@ -91,11 +107,11 @@ gulp.task('watch', ['build', 'serve'], () => {
         karma.runner.run({
             configFile: __dirname + '/karma.conf.js'
         }, done);
-    });
+    });*/
 
-    gulp.watch('app/index.html', ['html']);
-    gulp.watch(['app/js/!**!/!*.js', 'app/partials/!**!/!*', 'tests/!**!/!*.js'], ['scripts:hint', 'test:run']);
-    gulp.watch('app/styles/!*.less', ['styles']);
+    gulp.watch('view/html/*.html', ['html']);
+    gulp.watch('server/js/main.js', 'server/js/schema/*.js', 'view/js/*.js', 'scripts:hint');
+    gulp.watch('view/styles/!*.less', 'view/styles/*.css', ['styles']);
 });
 
 gulp.task('serve', () => {
@@ -108,11 +124,10 @@ gulp.task('serve', () => {
         });
 });
 
-gulp.task('test', ['scripts'], (done) => {
+/*gulp.task('test', ['scripts'], (done) => {
     new karma.Server({
         configFile: __dirname + '/karma.conf.js',
         autoWatch: false,
         singleRun: true
     }, done).start();
-});
-*/
+});*/
