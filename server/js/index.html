@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ProStatistic</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <script src="js/index.js"></script>
+    <script src="libs/angular-route.min.js"></script>
+    <script src="libs/angular-ui-rout.min.js"></script>
+    <link href="css/style.css" type="text/css" rel="stylesheet"/>
+</head>
+<body ng-app="ProApp">
+    <div ng-controller="ProStatisticController">
+        <h1 class="header">ProStatistic</h1>
+
+        <h2>Disciplines</h2>
+        <ul ng-repeat="discipline in disciplines">
+            <a href="#" ng-click="changeState(discipline.abbreviation)">{{discipline.name}}</a>
+            <!--<a href="#/teams" >{{discipline.name}}</a>-->
+        </ul>
+    </div>
+
+    <div class="container">
+        <div ui-view></div>
+    </div>
+
+</body>
+</html>
