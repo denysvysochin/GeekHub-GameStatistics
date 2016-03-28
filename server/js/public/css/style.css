@@ -3,3 +3,9 @@
     background-color: slategray;
     text-align: center;
 }
+
+.listElement{
+    background-color: #40a070;
+    font-style: italic;
+    font-weight: bold;
+}

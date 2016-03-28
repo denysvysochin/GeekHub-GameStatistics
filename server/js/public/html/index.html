@@ -15,8 +15,7 @@
 
         <h2>Disciplines</h2>
         <ul ng-repeat="discipline in disciplines">
-            <a href="#" ng-click="changeState(discipline.abbreviation)">{{discipline.name}}</a>
-            <!--<a href="#/teams" >{{discipline.name}}</a>-->
+            <list-el element='discipline' ng-click="changeState(discipline.abbreviation)"></list-el>
         </ul>
     </div>
 

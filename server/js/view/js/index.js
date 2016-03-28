@@ -10,22 +10,22 @@ proApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
     $stateProvider.
         state('teams',{
-               url:'/teams/{abbreviation}',
-               templateUrl: "html/pages/teams.html",
-               controller: "TeamsController"
-           }
+                   url:'/teams/{abbreviation}',
+                   templateUrl: "html/pages/teams.html",
+                   controller: "TeamsController"
+                   }
         ).
-    state('team',{
-               url:'/team/{abbreviation}',
-               templateUrl: "html/pages/team.html",
-               controller: "TeamsController"
-           }
+        state('team',{
+                   url:'/team/{abbreviation}',
+                   templateUrl: "html/pages/team.html",
+                   controller: "TeamController"
+                   }
         ).
-    state('player',{
-               url:'/player/{name}',
-               templateUrl: "html/pages/player.html",
-               controller: "PlayerController"
-           }
+        state('player',{
+                   url:'/player/{name}',
+                   templateUrl: "html/pages/player.html",
+                   controller: "PlayerController"
+                   }
         );
 });
 
@@ -37,23 +37,25 @@ proApp.controller('ProStatisticController', ['$scope', '$state', function ($scop
         {name: "World of Tanks", abbreviation: "WOT"}
     ];
 
-    $scope.changeState = function (abbreviation) {
-        $state.go("teams", {"abbreviation": abbreviation});
-    }
+
 }]);
 
 
-proApp.controller('TeamsController', ['$scope', '$state',  function($scope, $stateParams) {
-    $scope.game = $stateParams.abbreviation;
+proApp.controller('TeamsController', ['$scope', '$state', function($scope, $state) {
+    $scope.game = $state.params.abbreviation;
     $scope.teams = [
         {name: "Natus Vincer", abbreviation: "navi"},
         {name: "fnatic", abbreviation: "fn"},
         {name: "Titan", abbreviation: "tit"}
     ];
+
+    $scope.changeState = function (abbreviation) {
+        $state.go("team", {"abbreviation": abbreviation});
+    }
 }]);
 
-proApp.controller('TeamController', ['$scope', '$state', function($scope, $stateParams) {
-    $scope.game = $stateParams.abbreviation;
+proApp.controller('TeamController', ['$scope', '$state', function($scope, $state) {
+    $scope.team = $state.params.abbreviation;
     $scope.team = [
         {name: "Zeus", abbreviation: "navi"},
         {name: "Edward", abbreviation: "fn"},
@@ -61,9 +63,25 @@ proApp.controller('TeamController', ['$scope', '$state', function($scope, $state
     ];
 }]);
 
-proApp.controller('PlayerController', ['$scope', '$state', function($scope, $stateParams) {
-    $scope.game = $stateParams.abbreviation;
+proApp.controller('PlayerController', ['$scope', '$state', function($scope, $state) {
+    $scope.player = $stateParams.abbreviation;
     $scope.player = [
         {name: "Zeus", abbreviation: "navi"}
     ];
 }]);
+
+proApp.directive('listEl', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            el: '=element'
+        },
+        templateUrl: 'html/pages/template.html',
+        controller: ['$scope', '$state', function ($scope, $state) {
+            $scope.changeState = function (abbreviation) {
+                $state.go("teams", {"abbreviation": abbreviation});
+            }
+        }]
+
+    }
+});
